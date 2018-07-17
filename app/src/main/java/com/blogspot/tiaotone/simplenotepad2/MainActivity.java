@@ -8,21 +8,18 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 public class MainActivity extends AppCompatActivity {
     private ListView listView;
-    private Button btn_add;
     private SQLiteDatabase db = null;
 
-    final static String db_name = "db1.db";
     final static String table_name = "table01";
-    final static String create_table = "CREATE TABLE " + table_name + "(_id INTEGER PRIMARY KEY, title TEXT, text TEXT)";
+    final static String create_table = "CREATE TABLE " + table_name + "(_id INTEGER PRIMARY KEY, title TEXT, text TEXT ,bgColor TEXT)";
     Cursor cursor;
 
     @Override
@@ -30,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btn_add = (Button) findViewById (R.id.btn_add);
-        listView = (ListView) findViewById (R.id.listView);
+        listView = findViewById (R.id.listView);
+
         db = openOrCreateDatabase("db1.db",MODE_PRIVATE,null);
         try{
             db.execSQL(create_table);
@@ -39,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         cursor = getAll();
-        UpdataAdapter(cursor);
+        UpdateAdapter(cursor);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -52,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                                     cursor.getInt(0);
                                     db.delete("table01","_id="+cursor.getInt(0),null);
                                     cursor = getAll();
-                                    UpdataAdapter(cursor);
+                                    UpdateAdapter(cursor);
                                 }
                                 else if (which ==1){
                                     cursor.moveToPosition(position);
@@ -71,19 +68,11 @@ public class MainActivity extends AppCompatActivity {
                         }).show();
             }
         });
-        btn_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,InsertActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
     }
 
-    private void UpdataAdapter(Cursor cursor) {
+    private void UpdateAdapter(Cursor cursor) {
         if(cursor != null && cursor.getCount() >= 0){
-            SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,android.R.layout.simple_list_item_2,cursor,new String[]{"title","text"},new int[]{android.R.id.text1,android.R.id.text2});
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,R.layout.item_view,cursor,new String[]{"title","text"},new int[]{android.R.id.text1,android.R.id.text2});
             listView.setAdapter(adapter);
         }
     }
@@ -97,6 +86,18 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.add:
+                Intent intent = new Intent(MainActivity.this,InsertActivity.class);
+                startActivity(intent);
+                finish();
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     @Override

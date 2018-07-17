@@ -4,18 +4,28 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class UpdateActivity extends AppCompatActivity {
     private Button btn_ok;
     private EditText edt_title;
     private EditText edt_content;
+    Spinner sp_color;
+    ColorAdapter adapter;
+    String selected_color;
+
     String title,text;
     int s1 = 0;
 
@@ -33,6 +43,8 @@ public class UpdateActivity extends AppCompatActivity {
         edt_title = (EditText) findViewById (R.id.edt_title);
         edt_content = (EditText) findViewById (R.id.edt_content);
         btn_ok = (Button) findViewById (R.id.btn_ok);
+        initView();
+
 
         db = openOrCreateDatabase("db1.db",MODE_PRIVATE, null);
         try{
@@ -62,6 +74,38 @@ public class UpdateActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
+            }
+        });
+    }
+
+    private void initView() {
+        sp_color = findViewById(R.id.sp_color);
+        final ArrayList<ItemData> color_list = new ArrayList<ItemData>();
+        color_list.add(new ItemData("bright_pink","#FF007F"));
+        color_list.add(new ItemData("red","#FF0000"));
+        color_list.add(new ItemData("orange","#FF7F00"));
+        color_list.add(new ItemData("yellow","#FFFF00"));
+        color_list.add(new ItemData("chartreuse","#7FFF00"));
+        color_list.add(new ItemData("green","#00FF00"));
+        color_list.add(new ItemData("spring_green","#00FF7F"));
+        color_list.add(new ItemData("cyan","#00FFFF"));
+        color_list.add(new ItemData("azure","#007FFF"));
+        color_list.add(new ItemData("blue","#0000FF"));
+        color_list.add(new ItemData("violet","#7F00FF"));
+        color_list.add(new ItemData("magenta","#FF00FF"));
+        adapter = new ColorAdapter(this,color_list);
+        sp_color.setAdapter(adapter);
+        sp_color.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                TextView tvColor = ((view.findViewById(R.id.tv_color)));
+                ColorDrawable drawable = (ColorDrawable) tvColor.getBackground();
+                selected_color = Integer.toHexString(drawable.getColor()).substring(2);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }

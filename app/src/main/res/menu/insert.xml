@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/clear"
-        android:title="刪除" />
+        android:title="清除文字" />
     <item
         android:id="@+id/back"
         android:title="返回" />

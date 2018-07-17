@@ -9,6 +9,17 @@
     tools:context=".InsertActivity">
 
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/darker_gray"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="新增記事"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +66,13 @@
             android:inputType="textMultiLine"
             android:singleLine="false"
             android:textSize="24sp" />
+
     </LinearLayout>
+
+    <Spinner
+        android:id="@+id/sp_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/btn_ok"
