@@ -31,7 +31,7 @@ public class InsertActivity extends AppCompatActivity {
 
     SQLiteDatabase db = null;
     final static String table_name = "table01";
-    final static String create_table = "CREATE TABLE " + table_name + "(_id INTEGER PRIMARY KEY, title TEXT, text TEXT, bgColor TEXT)";
+    final static String create_table = "CREATE TABLE " + table_name + "(_id INTEGER PRIMARY KEY, title TEXT, text TEXT)";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +53,17 @@ public class InsertActivity extends AppCompatActivity {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(edt_title.getText().toString().equals("")){
+                if(edt_title.getText().toString().equals("")){ //如標題無輸入則將現在時間設為標題
                     Calendar calendar = Calendar.getInstance();
                     String now = ""+calendar.get(Calendar.YEAR)+"/"+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.DATE)+" "+calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE);
                     edt_title.setText(now);
                 }
-                if(edt_content.getText().toString().equals("")){
+                if(edt_content.getText().toString().equals("")){//如內文無輸入則將"無輸入"設為內文
                     edt_content.setText("無輸入");
                 }
                 ContentValues cv = new ContentValues();
                 cv.put("title", edt_title.getText().toString());
                 cv.put("text", edt_content.getText().toString());
-                cv.put("bgColor",selected_color.getBytes().toString());
                 db.insert("table01",null,cv);
                 Intent intent = new Intent(InsertActivity.this, MainActivity.class);
                 startActivity(intent);

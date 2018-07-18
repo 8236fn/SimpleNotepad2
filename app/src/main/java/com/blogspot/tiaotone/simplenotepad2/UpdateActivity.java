@@ -57,8 +57,8 @@ public class UpdateActivity extends AppCompatActivity {
             s1 = bundle.getInt("key1");
             cursor = db.rawQuery("SELECT * FROM table01 WHERE _id= '"+ s1 + "'",null);
             cursor.moveToFirst();
-            title = cursor.getString(1);
-            text = cursor.getString(2);
+            title = cursor.getString(1);//查詢table01的第一欄位資料,即title
+            text = cursor.getString(2);//查詢table01的第二欄位資料,即text
             edt_title.setText(title);
             edt_content.setText(text);
         }

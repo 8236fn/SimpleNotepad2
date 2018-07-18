@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase db = null;
 
     final static String table_name = "table01";
-    final static String create_table = "CREATE TABLE " + table_name + "(_id INTEGER PRIMARY KEY, title TEXT, text TEXT ,bgColor TEXT)";
+    final static String create_table = "CREATE TABLE " + table_name + "(_id INTEGER PRIMARY KEY, title TEXT, text TEXT)";
     Cursor cursor;
 
     @Override
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         cursor = getAll();
-        UpdateAdapter(cursor);
+        UpdateAdapter(cursor);//將資料顯示在ListView
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -46,17 +46,17 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 if (which == 0){
                                     cursor.moveToPosition(position);
-                                    cursor.getInt(0);
+                                    cursor.getInt(0);//取得此筆資料的第0個欄位-- id
                                     db.delete("table01","_id="+cursor.getInt(0),null);
                                     cursor = getAll();
                                     UpdateAdapter(cursor);
                                 }
                                 else if (which ==1){
                                     cursor.moveToPosition(position);
-                                    int c = cursor.getInt(0);
+                                    int c = cursor.getInt(0);//取得此筆資料的第0個欄位-- id
                                     Intent intent = new Intent(MainActivity.this,UpdateActivity.class);
                                     Bundle bundle = new Bundle();
-                                    bundle.putInt("key1",c);
+                                    bundle.putInt("key1",c);//將id放入key1
                                     intent.putExtras(bundle);
                                     startActivity(intent);
                                     finish();
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void UpdateAdapter(Cursor cursor) {
         if(cursor != null && cursor.getCount() >= 0){
-            SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,R.layout.item_view,cursor,new String[]{"title","text"},new int[]{android.R.id.text1,android.R.id.text2});
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,android.R.layout.simple_list_item_2,cursor,new String[]{"title","text"},new int[]{android.R.id.text1,android.R.id.text2});
             listView.setAdapter(adapter);
         }
     }
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy() {//離開程式時關閉資料庫
         super.onDestroy();
         db.close();
     }
